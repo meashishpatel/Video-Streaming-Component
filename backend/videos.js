@@ -1,18 +1,36 @@
 const express = require("express");
+const cors = require("cors");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
+const PORT = 5500;
 
-const videoFileMap = {
-  cdn: "videos/cdn.mp4",
-  "generate-pass": "videos/generate-pass.mp4",
-  "get-post": "videos/get-post.mp4",
-};
+app.use(cors());
 
+// main backend folder where all thing will are need toread
+const videoDir = path.join(__dirname, "uploads");
+
+// Api
+app.get("/videos", (req, res) => {
+  try {
+    const videoFiles = fs.readdirSync(videoDir).map((file) => ({
+      name: path.parse(file).name,
+      path: `${path.parse(file).name}`,
+    }));
+    res.json(videoFiles);
+  } catch (err) {
+    console.error("Error reading video directory:", err);
+    res.status(500).send("Failed to retrieve video list");
+  }
+});
+
+// Api to stream video
 app.get("/videos/:filename", (req, res) => {
   const fileName = req.params.filename;
-  const filePath = videoFileMap[fileName];
-  if (!filePath) {
+  const filePath = path.join(videoDir, `${fileName}.mp4`);
+  
+  if (!fs.existsSync(filePath)) {
     return res.status(404).send("File not found");
   }
 
@@ -45,6 +63,6 @@ app.get("/videos/:filename", (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log("server is listening on post 3000");
+app.listen(PORT, () => {
+  console.log(`Videos Stream Service on port ${PORT}`);
 });
