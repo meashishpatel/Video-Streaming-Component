@@ -9,7 +9,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+<<<<<<< HEAD
     "express": "^4.21.2",
     "pm2": "^5.4.3"
+=======
+    "cors": "^2.8.5",
+    "cros": "^1.0.1",
+    "express": "^4.21.2",
+    "hls.js": "^1.5.19"
+>>>>>>> 905a32d6aef7f0a084ca0a7eb7eaf5c00e3b703f
   }
 }
