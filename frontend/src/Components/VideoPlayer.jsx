@@ -5,17 +5,28 @@ const VideoPlayer = ({ videoId }) => {
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.removeAttribute("src");
-      videoRef.current.load();
+      const videoElement = videoRef.current;
+
+      videoElement.pause();
+      videoElement.src = `http://localhost:5500/videos/${videoId}`;
+      videoElement.load();
+
+      const handleLoadedData = () => {
+        videoElement.play().catch((error) => {
+          console.error("Failed to play video:", error);
+        });
+      };
+
+      videoElement.addEventListener("loadeddata", handleLoadedData);
+
+      return () => {
+        videoElement.removeEventListener("loadeddata", handleLoadedData);
+      };
     }
-  });
+  }, [videoId]);
+
   return (
-    <video ref={videoRef} width="320" height="240" controls autoPlay>
-      <source
-        src={`http://localhost:3000/videos/${videoId}`}
-        type="video/mp4"
-      ></source>
+    <video ref={videoRef} width="640" height="360" controls>
       Your browser does not support the video tag.
     </video>
   );

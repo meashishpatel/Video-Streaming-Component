@@ -9,6 +9,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^4.21.2"
+    "cors": "^2.8.5",
+    "cros": "^1.0.1",
+    "express": "^4.21.2",
+    "hls.js": "^1.5.19"
   }
 }
